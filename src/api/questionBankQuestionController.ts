@@ -104,6 +104,21 @@ export async function listMyQuestionBankQuestionVoByPageUsingPost(
   );
 }
 
+/** removeQuestionBank POST /api/questionBankQuestion/remove */
+export async function removeQuestionBankUsingPost(
+  body: API.QuestionBankQuestionRemoveRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/questionBankQuestion/remove", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** updateQuestionBankQuestion POST /api/questionBankQuestion/update */
 export async function updateQuestionBankQuestionUsingPost(
   body: API.QuestionBankQuestionUpdateRequest,

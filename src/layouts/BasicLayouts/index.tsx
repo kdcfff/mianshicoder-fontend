@@ -5,17 +5,20 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { ProLayout } from "@ant-design/pro-components";
-import { Dropdown, Input } from "antd";
+import { Dropdown, Input, message } from "antd";
 import React from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import GlobalFooter from "@/components/GlobalFooter";
 import { menus } from "../../../config/menu";
 import "./index.css";
-import { RootState } from "@/stores";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/stores";
+import { useDispatch, useSelector } from "react-redux";
 import getAccessibleMenus from "@/access/menuAccess";
+import { userLogoutUsingPost } from "@/api/userController";
+import { setLoginUser } from "@/stores/loginUser";
+import { DEFAULT_USER } from "@/app/constants/user";
 
 /**
  * 搜索条
@@ -60,8 +63,20 @@ interface Props {
  */
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
-
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const loginUser = useSelector((state: RootState) => state.loginUser);
+  const userLogout = async () => {
+    // 退出登录
+    try {
+      const res = await userLogoutUsingPost();
+      message.success("退出登录成功");
+      dispatch(setLoginUser(DEFAULT_USER));
+      router.replace("/user/login");
+    } catch (e: any) {
+      message.error("退出登录失败，" + e.message);
+    }
+  };
   return (
     <div
       id="basicLayout"
@@ -89,6 +104,9 @@ export default function BasicLayout({ children }: Props) {
           size: "small",
           title: loginUser.userName || "未登录",
           render: (props, dom) => {
+            if (!loginUser.id) {
+              return dom;
+            }
             return (
               <Dropdown
                 menu={{
@@ -99,6 +117,11 @@ export default function BasicLayout({ children }: Props) {
                       label: "退出登录",
                     },
                   ],
+                  onClick: async (event: { key: React.Key }) => {
+                    if (event.key === "logout") {
+                      userLogout();
+                    }
+                  },
                 }}
               >
                 {dom}
@@ -134,7 +157,7 @@ export default function BasicLayout({ children }: Props) {
         onMenuHeaderClick={(e) => console.log(e)}
         // 定义有哪些菜单
         menuDataRender={() => {
-          return getAccessibleMenus(loginUser,menus);
+          return getAccessibleMenus(loginUser, menus);
         }}
         // 定义了菜单项如何渲染
         menuItemRender={(item, dom) => (

@@ -26,16 +26,8 @@ const InitLayout: React.FC<
     const res = await getLoginUserUsingGet();
     if (res.data) {
       // 更新全局用户状态
-    } else {
-      setTimeout(() => {
-        const testUser = {
-          userName: "测试登录",
-          id: 1,
-          userAvatar: "https://www.code-nav.cn/logo.png",
-          userRole: ACCESS_ENUM.ADMIN,
-        };
-        dispatch(setLoginUser(testUser));
-      }, 3000);
+      // @ts-ignore
+      dispatch(setLoginUser(res.data));
     }
   }, []);
 

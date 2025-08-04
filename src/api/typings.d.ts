@@ -151,8 +151,18 @@ declare namespace API {
   };
 
   type getQuestionBankVOByIdUsingGETParams = {
-    /** id */
+    current?: number;
+    description?: string;
     id?: number;
+    needQueryQuestionList?: boolean;
+    notId?: number;
+    pageSize?: number;
+    picture?: string;
+    searchText?: string;
+    sortField?: string;
+    sortOrder?: string;
+    title?: string;
+    userId?: number;
   };
 
   type getQuestionVOByIdUsingGETParams = {
@@ -460,6 +470,7 @@ declare namespace API {
     current?: number;
     description?: string;
     id?: number;
+    needQueryQuestionList?: boolean;
     notId?: number;
     pageSize?: number;
     picture?: string;
@@ -498,6 +509,11 @@ declare namespace API {
     userId?: number;
   };
 
+  type QuestionBankQuestionRemoveRequest = {
+    questionBankId?: number;
+    questionId?: number;
+  };
+
   type QuestionBankQuestionUpdateRequest = {
     id?: number;
     questionBankId?: number;
@@ -528,6 +544,7 @@ declare namespace API {
     editTime?: string;
     id?: number;
     picture?: string;
+    questionPage?: PageQuestion_;
     title?: string;
     updateTime?: string;
     user?: UserVO;
@@ -549,6 +566,7 @@ declare namespace API {
     id?: number;
     notId?: number;
     pageSize?: number;
+    questionBankId?: number;
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
