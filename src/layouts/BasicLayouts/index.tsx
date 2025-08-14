@@ -105,7 +105,9 @@ export default function BasicLayout({ children }: Props) {
           title: loginUser.userName || "未登录",
           render: (props, dom) => {
             if (!loginUser.id) {
-              return dom;
+              return (
+                <div onClick={() => router.push("/user/login")}>{dom}</div>
+              );
             }
             return (
               <Dropdown
